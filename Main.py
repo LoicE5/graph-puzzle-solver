@@ -80,26 +80,38 @@ def isSolvable(puzzle):
 
 
 #1,8,7,3,0,5,4,6,2 is solvable
-#12,1,10,2,7,11,4,14,5,0,9,15,8,13,6,3 is solvable
+#7, 11, 5, 8, 1, 10, 2, 4, 9, 0, 3, 6, 13, 14, 15, 12 is solvable
 
 
 if isSolvable(puzzle):
     print("Solvable, please wait. \n")
     
-    #time1 = time()
-   # BFS_solution = BFS2(state,goal)
-   # BFS_time = time() - time1
-   # print('BFS Solution is ', BFS_solution[0])
-   # print('Number of explored nodes is ', BFS_solution[1])    
-  #  print('BFS Time:', BFS_time , "\n")
+    time1 = time()
+    BFS_solution = BFS(state,n,goal)
+    BFS_time = time() - time1
+    print('BFS Solution is : ')
+    for key,value in BFS_solution[0].items():
+        print(key ,'|| Move -> ', value, ' ||\n\n')
+    print('Number of explored nodes is ', BFS_solution[1])    
+    print('BFS Time:', BFS_time , "\n")
     
     time4 = time()
     AStar_solution = AStar_search(state, n, goal, heuristic)
     AStar_time = time() - time4
-    print('A* Solution is ', AStar_solution[0])
+    print('A* Solution is with ',heuristic,' : ')
+    for key,value in AStar_solution[0].items():
+        print(key ,'|| Move -> ', value, ' ||\n\n')
     print('Number of explored nodes is ', AStar_solution[1])   
     print('A* Time:', AStar_time)
     
     
 else:
     print("Not solvable")
+
+    
+
+
+#1,2,3,4,5,6,7,8,9,14,15,0,13,10,11,12 resolvable par tous les algos 
+#3.38 en misplaced tiles 9386 nodes explored
+#22.114 en bfs avec 1352057 nodes explored
+#0.041081905364990234 en manhattan 1014 nodes explored

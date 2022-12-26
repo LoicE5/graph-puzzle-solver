@@ -5,23 +5,27 @@ from queue import LifoQueue
 
 
 #Breadth-first Search
-def BFS(given_state , n):
-    root = State(given_state, None, None, 0, 0)
-    if root.test():
-        return root.solution()
+def BFS(given_state , n, goal):
     frontier = Queue()
-    frontier.put(root)
-    explored = []
+    explored = set()
     
-    while not(frontier.empty()):
+    initial = State(given_state, None, None, 0, 0, goal)
+    frontier.put(initial)
+
+    counter = 0
+	# while nodes is not empty
+
+
+    while not frontier.empty():
         current_node = frontier.get()
-        explored.append(current_node.state)
-        
+        current_state = current_node.state
+        explored.add(str(current_state))
         children = current_node.expand(n)
+        if current_node.test():
+            return current_node.solution(n), len(explored)
         for child in children:
-            if child.state not in explored:
-                if child.test():
-                    return child.solution(), len(explored)
+            if str(child.state) not in explored:
+                counter += 1
                 frontier.put(child)
     return
 
@@ -42,7 +46,7 @@ def AStar_search(given_state , n, goal, heuristic):
         explored.append(current_node.state)
         
         if current_node.test():
-            return current_node.solution(), len(explored)
+            return current_node.solution(n), len(explored)
 
         children = current_node.expand(n)
         for child in children:

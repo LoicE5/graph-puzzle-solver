@@ -1,3 +1,5 @@
+
+
 class State:
     AStar_evaluation = None
     heuristic = None
@@ -89,14 +91,16 @@ class State:
         return children
 
     
+
     #gets the given state and returns it's direction + it's parent's direction till there is no parent
-    def solution(self):
+    def solution(self, n):
         solution = {}
-        solution[str(self.state)] = (self.direction)
+        solution[aaa(self.state,n)] = (self.direction)
         path = self
         while path.parent != None:
             path = path.parent
-            solution[str(path.state)] = (path.direction)
+            stre = aaa(path.state,n)
+            solution[stre] = (path.direction)
         res =dict(reversed(list(solution.items())))
         return res
 
@@ -105,4 +109,11 @@ class State:
 
     # def isVisited(self):
     #     return self.visited
-         
+def aaa(key,n):
+        stre = "|"
+        for i in range(len(key)):
+            stre += " "
+            stre += (str(key[i]))
+            if((i+1) %n==0):
+                stre += " |\n|"
+        return stre
