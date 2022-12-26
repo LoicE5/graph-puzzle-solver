@@ -1,6 +1,7 @@
 from Search_Algorithms import BFS, AStar_search
 from time import time
 import os
+from Utils import start_timeout_check_thread, force_stop, getInvCount, findXPosition, isSolvable
 
 #initial state
 n = int(input("Enter n\n"))
@@ -33,58 +34,14 @@ print("Puzzle equal : ", puzzle)
 print("Need Misplaced or manhattan resolution")
 heuristic = str(input())
 
-def getInvCount(arr):
-    arr1=[]
-    for y in arr:
-        for x in y:
-            arr1.append(x)
-    arr=arr1
-    inv_count = 0
-    for i in range(n * n - 1):
-        for j in range(i + 1,n * n):
-            # count pairs(arr[i], arr[j]) such that
-            # i < j and arr[i] > arr[j]
-            if (arr[j] and arr[i] and arr[i] > arr[j]):
-                inv_count+=1
-         
-     
-    return inv_count
- 
- 
-# find Position of blank from bottom
-def findXPosition(puzzle):
-    # start from bottom-right corner of matrix
-    for i in range(n - 1,-1,-1):
-        for j in range(n - 1,-1,-1):
-            if (puzzle[i][j] == 0):
-                return n - i
- 
- 
-# This function returns true if given
-# instance of N*N - 1 puzzle is solvable
-def isSolvable(puzzle):
-    # Count inversions in given puzzle
-    invCount = getInvCount(puzzle)
- 
-    # If grid is odd, return true if inversion
-    # count is even.
-    if (n & 1):
-        return ~(invCount & 1)
- 
-    else:    # grid is even
-        pos = findXPosition(puzzle)
-        if (pos & 1):
-            return ~(invCount & 1)
-        else:
-            return invCount & 1
-
 
 #1,8,7,3,0,5,4,6,2 is solvable
 #7, 11, 5, 8, 1, 10, 2, 4, 9, 0, 3, 6, 13, 14, 15, 12 is solvable
 
 
-if isSolvable(puzzle):
+if isSolvable(puzzle,n):
     print("Solvable, please wait. \n")
+    start_timeout_check_thread()
     
     time1 = time()
     BFS_solution = BFS(state,n,goal)
@@ -96,6 +53,7 @@ if isSolvable(puzzle):
     print('BFS Time:', BFS_time , "\n")
     
     time4 = time()
+
     AStar_solution = AStar_search(state, n, goal, heuristic)
     AStar_time = time() - time4
     print('A* Solution is with ',heuristic,' : ')
@@ -103,6 +61,8 @@ if isSolvable(puzzle):
         print(key ,'|| Move -> ', value, ' ||\n\n')
     print('Number of explored nodes is ', AStar_solution[1])   
     print('A* Time:', AStar_time)
+
+    force_stop() # Here to kill any remaining thread after execution
     
     
 else:
