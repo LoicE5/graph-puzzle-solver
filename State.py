@@ -17,8 +17,7 @@ class State:
         else:
             self.cost = cost
 
-            
-            
+    
     def test(self): #check if the given state is goal
         if self.state == self.goal:
             return True
@@ -50,11 +49,9 @@ class State:
         self.AStar_evaluation = self.heuristic + self.cost
 
         return(self.AStar_evaluation)    #Nous on doit return      
-                    
 
 
     @staticmethod
-    
     #this would remove illegal moves for a given state
     def available_moves(x,n): 
         moves = ['Left', 'Right', 'Up', 'Down']
@@ -91,7 +88,6 @@ class State:
         return children
 
     
-
     #gets the given state and returns it's direction + it's parent's direction till there is no parent
     def solution(self, n):
         solution = {}
