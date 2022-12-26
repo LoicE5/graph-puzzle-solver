@@ -4,13 +4,13 @@ from PuzzleSolver import PuzzleSolver, BFS, Astar
 
 n = int(input("Please enter your desired puzzle's dimension :\n"))
 
-base_solver = PuzzleSolver(n)
+base_solver = PuzzleSolver(dimension=n)
 
 p = str(input(f"Please enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
 
 while(not base_solver.is_puzzle_string_right_dimension(p)):
     clearCLI()
-    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
+    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n")) or "manhattan"
 
 base_solver.build_puzzle(p)
 
@@ -28,8 +28,14 @@ if base_solver.is_solvable():
     start_timeout_check_thread()
     
     bfs_start_time = now()
-    BFS_solution = BFS(base_solver).run()
+    BFS_solution = BFS(
+        dimension=n,
+        puzzle_string=p
+    ).run()
     BFS_time = now() - bfs_start_time
+
+    import Search_Algorithms
+    print(Search_Algorithms.BFS(base_solver.state,base_solver.dimension,base_solver.goal))
 
     print('BFS Solution is : ')
     for key,value in BFS_solution[0].items():
@@ -38,7 +44,11 @@ if base_solver.is_solvable():
     print('BFS Time:', BFS_time , "\n")
     
     astar_start_time = now()
-    AStar_solution = Astar(base_solver,heuristic).run()
+    AStar_solution = Astar(
+        dimension=n,
+        heuristic=heuristic,
+        puzzle_string=p
+    ).run()
     AStar_time = now() - astar_start_time
 
     print('A* Solution is with ',heuristic,' : ')

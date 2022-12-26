@@ -11,8 +11,10 @@ class PuzzleSolver:
     state:list = []
     goal:list = []
 
-    def __init__(self, dimension:int):
+    def __init__(self, dimension:int, puzzle_string:str=None):
         self.dimension = dimension
+        if puzzle_string is not None:
+            self.build_puzzle(puzzle_string)
 
     def build_puzzle(self, puzzle_string:str):
         j = 1
@@ -58,16 +60,8 @@ class PuzzleSolver:
 
 class Astar(PuzzleSolver):
 
-    def __init__(self, dimension:int, heuristic:str):
-        super(dimension)
-        self.heuristic = heuristic
-
-    def __init__(self, solver:PuzzleSolver, heuristic:str):
-        super(solver.dimension)
-        self.puzzle = solver.puzzle
-        self.rows = solver.rows
-        self.state = solver.state
-        self.goal = solver.goal
+    def __init__(self, dimension:int, heuristic:str, puzzle_string:str=None):
+        super().__init__(dimension, puzzle_string)
         self.heuristic = heuristic
 
     def run(self):
@@ -102,15 +96,8 @@ class Astar(PuzzleSolver):
 
 class BFS(PuzzleSolver):
 
-    def __init__(dimension:int):
-        super(dimension)
-
-    def __init__(self, solver:PuzzleSolver):
-        super(solver.dimension)
-        self.puzzle = solver.puzzle
-        self.rows = solver.rows
-        self.state = solver.state
-        self.goal = solver.goal
+    def __init__(self, dimension:int, puzzle_string:str=None):
+        super().__init__(dimension, puzzle_string)
 
     def run(self):
         frontier = Queue()
