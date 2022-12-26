@@ -1,61 +1,46 @@
-from Search_Algorithms import BFS, AStar_search
-from time import time
-import os
-from Utils import start_timeout_check_thread, force_stop, getInvCount, findXPosition, isSolvable
+from time import time as now
+from Utils import start_timeout_check_thread, force_stop, clearCLI
+from PuzzleSolver import PuzzleSolver, BFS, Astar
 
-#initial state
-n = int(input("Enter n\n"))
-puzzle=[]
-rows = []
-state = []
-goal = []
-print("Enter your" ,n,"*",n, "puzzle")
-p = str(input())
+n = int(input("Please enter your desired puzzle's dimension :\n"))
 
-while(len(p.split(",")) != n*n):
-    os.system('cls')
-    print("Enter your" ,n,"*",n, "puzzle")
-    p = str(input())
-j = 1
-for i in p.split(","):
-    state.append(int(i))
-    rows.append(int(i))
-    if len(rows) % n == 0: 
-        puzzle.append(rows)
-        rows = []
-    goal.append(j)
-    j+=1
-goal[len(goal)-1] = 0 
-os.system('cls')
-print("The given state is : ", state)
-print("The goal state is : ", goal)
-print("Puzzle equal : ", puzzle)
+base_solver = PuzzleSolver(n)
 
-print("Need Misplaced or manhattan resolution")
-heuristic = str(input())
+p = str(input(f"Please enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
+
+while(not base_solver.is_puzzle_string_right_dimension(p)):
+    clearCLI()
+    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
+
+base_solver.build_puzzle(p)
+
+clearCLI()
+
+print("The given state is : ", base_solver.state)
+print("The goal state is : ", base_solver.goal)
+print("Puzzle equal : ", base_solver.puzzle)
+
+heuristic = str(input('Please specify wether you want a A* solving using Misplaced tiles heuristic (type "misplaced") or with Manhattan distance heuristic (type "manhattan") :\n'))
 
 
-#1,8,7,3,0,5,4,6,2 is solvable
-#7, 11, 5, 8, 1, 10, 2, 4, 9, 0, 3, 6, 13, 14, 15, 12 is solvable
-
-
-if isSolvable(puzzle,n):
+if base_solver.is_solvable():
     print("Solvable, please wait. \n")
     start_timeout_check_thread()
     
-    time1 = time()
-    BFS_solution = BFS(state,n,goal)
-    BFS_time = time() - time1
+    bfs_start_time = now()
+    BFS_solution = BFS(base_solver).run()
+    BFS_time = now() - bfs_start_time
+
     print('BFS Solution is : ')
     for key,value in BFS_solution[0].items():
         print(key ,'|| Move -> ', value, ' ||\n\n')
     print('Number of explored nodes is ', BFS_solution[1])    
     print('BFS Time:', BFS_time , "\n")
     
-    time4 = time()
+    astar_start_time = now()
+    AStar_solution = Astar(base_solver,heuristic).run()
+    AStar_time = now() - astar_start_time
 
-    AStar_solution = AStar_search(state, n, goal, heuristic)
-    AStar_time = time() - time4
     print('A* Solution is with ',heuristic,' : ')
     for key,value in AStar_solution[0].items():
         print(key ,'|| Move -> ', value, ' ||\n\n')

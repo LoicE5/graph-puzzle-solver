@@ -100,11 +100,7 @@ class State:
         res =dict(reversed(list(solution.items())))
         return res
 
-    # def changeVisited(self):
-    #     self.visited = True
 
-    # def isVisited(self):
-    #     return self.visited
 def aaa(key,n):
         stre = "|"
         for i in range(len(key)):
