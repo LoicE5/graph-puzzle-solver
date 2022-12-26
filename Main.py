@@ -34,9 +34,6 @@ if base_solver.is_solvable():
     ).run()
     BFS_time = now() - bfs_start_time
 
-    import Search_Algorithms
-    print(Search_Algorithms.BFS(base_solver.state,base_solver.dimension,base_solver.goal))
-
     print('BFS Solution is : ')
     for key,value in BFS_solution[0].items():
         print(key ,'|| Move -> ', value, ' ||\n\n')

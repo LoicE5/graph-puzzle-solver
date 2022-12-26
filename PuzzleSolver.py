@@ -1,32 +1,35 @@
 from Utils import get_inv_count
-from State import State
+from Node import Node
 from queue import PriorityQueue
 from queue import Queue
 from typing import List
 
 class PuzzleSolver:
-    dimension:int
-    puzzle:list = []
-    rows:list = []
-    state:list = []
-    goal:list = []
 
     def __init__(self, dimension:int, puzzle_string:str=None):
-        self.dimension = dimension
+        self.dimension:int = dimension
+        self.puzzle:list = []
+        self.rows:list = []
+        self.state:list = []
+        self.goal:list = []
+        
         if puzzle_string is not None:
             self.build_puzzle(puzzle_string)
 
     def build_puzzle(self, puzzle_string:str):
         j = 1
+
         for i in puzzle_string.split(","):
-            i = int(i)
-            self.state.append(i)
-            self.rows.append(i)
+            self.state.append(int(i))
+            self.rows.append(int(i))
+
             if len(self.rows) % self.dimension == 0: 
                 self.puzzle.append(self.rows)
                 self.rows = []
+            
             self.goal.append(j)
             j+=1
+        
         self.goal[len(self.goal)-1] = 0
 
     def is_puzzle_string_right_dimension(self, puzzle_string:str):
@@ -62,22 +65,22 @@ class Astar(PuzzleSolver):
 
     def __init__(self, dimension:int, heuristic:str, puzzle_string:str=None):
         super().__init__(dimension, puzzle_string)
-        self.heuristic = heuristic
+        self.heuristic:str = heuristic
 
     def run(self):
         frontier = PriorityQueue()
         explored = []
         counter = 0
-        root = State(self.state, None, None, 0, 0, self.goal)
+        root = Node(self.state, None, None, 0, 0, self.goal)
         if self.heuristic == 'manhattan':
-            evaluation = root.Manhattan_Distance(self.dimension) 
+            evaluation = root.manhattan_distance(self.dimension) 
         else:
-            evaluation = root.Misplaced_Tiles(self.dimension) 
+            evaluation = root.misplaced_tiles(self.dimension) 
         frontier.put((evaluation, counter, root)) #based on A* evaluation
 
         while not frontier.empty():
             current_node:tuple = frontier.get()
-            current_node:State = current_node[2]
+            current_node:Node = current_node[2]
             explored.append(current_node.state)
             
             if current_node.test():
@@ -88,9 +91,9 @@ class Astar(PuzzleSolver):
                 if child.state not in explored:
                     counter += 1
                     if self.heuristic == 'manhattan':
-                        evaluation = child.Manhattan_Distance(self.dimension) 
+                        evaluation = child.manhattan_distance(self.dimension) 
                     else:
-                        evaluation = child.Misplaced_Tiles(self.dimension) 
+                        evaluation = child.misplaced_tiles(self.dimension) 
                     frontier.put((evaluation, counter, child)) #based on A* evaluation
         return
 
@@ -103,18 +106,18 @@ class BFS(PuzzleSolver):
         frontier = Queue()
         explored = set()
         
-        initial = State(self.state, None, None, 0, 0, self.goal)
+        initial = Node(self.state, None, None, 0, 0, self.goal)
         frontier.put(initial)
         counter = 0
 
         # while nodes is not empty
         while not frontier.empty():
 
-            current_node:State = frontier.get()
+            current_node:Node = frontier.get()
             current_state:list = current_node.state
 
             explored.add(str(current_state))
-            children:List[State] = current_node.expand(self.dimension)
+            children:List[Node] = current_node.expand(self.dimension)
 
             if current_node.test():
                 return current_node.solution(self.dimension), len(explored)

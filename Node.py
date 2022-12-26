@@ -1,21 +1,22 @@
+from Utils import available_moves, format_current_status_for_printing
 
+class Node:
 
-class State:
-    AStar_evaluation = None
-    heuristic = None
-    def __init__(self, state, parent, direction, depth, cost, goal):
-        self.state = state
-        self.parent = parent
-        self.direction = direction
-        self.depth = depth
-        self.goal = goal
-        # self.visited = False
+    def __init__(self, state:list, parent, direction:str, depth:int, cost:int, goal:list):
+        self.state:list = state
+        self.parent:Node = parent
+        self.direction:str = direction
+        self.depth:int = depth
+        self.goal:list = goal
+
+        self.AStar_evaluation:int = None
+        self.heuristic:int = None
 
         if parent:
-            self.cost = parent.cost + cost
+            self.cost:int = parent.cost + cost
 
         else:
-            self.cost = cost
+            self.cost:int = cost
 
     
     def test(self): #check if the given state is goal
@@ -24,21 +25,20 @@ class State:
         return False
         
     #heuristic function based on Manhattan distance
-    def Manhattan_Distance(self ,n): 
+    def manhattan_distance(self ,n:int): 
         self.heuristic = 0
         for i in range(1 , n*n):
-            distance = abs(self.state.index(i) - self.goal.index(i))
+            dist = abs(self.state.index(i) - self.goal.index(i))
             
             #manhattan distance between the current state and goal state
-            self.heuristic = self.heuristic + distance/n + distance%n
+            self.heuristic = self.heuristic + dist/n + dist%n
   
         self.AStar_evaluation = self.heuristic + self.cost
         
-        return(self.AStar_evaluation)
-
+        return self.AStar_evaluation
 
     #heuristic function based on number of misplaced tiles
-    def Misplaced_Tiles(self,n): 
+    def misplaced_tiles(self,n:int): 
         counter = 0
         self.heuristic = 0
         for i in range(n*n):
@@ -48,28 +48,12 @@ class State:
  
         self.AStar_evaluation = self.heuristic + self.cost
 
-        return(self.AStar_evaluation)    #Nous on doit return      
-
-
-    @staticmethod
-    #this would remove illegal moves for a given state
-    def available_moves(x,n): 
-        moves = ['Left', 'Right', 'Up', 'Down']
-        if x % n == 0:
-            moves.remove('Left')
-        if x % n == n-1:
-            moves.remove('Right')
-        if x - n < 0:
-            moves.remove('Up')
-        if x + n > n*n - 1:
-            moves.remove('Down')
-
-        return moves
+        return self.AStar_evaluation
 
     #produces children of a given state
-    def expand(self , n): 
+    def expand(self , n:int)->list: 
         x = self.state.index(0)
-        moves = self.available_moves(x,n)
+        moves = available_moves(x,n)
         
         children = []
         for direction in moves:
@@ -84,28 +68,18 @@ class State:
                 temp[x], temp[x + n] = temp[x + n], temp[x]
         
         
-            children.append(State(temp, self, direction, self.depth + 1, 1, self.goal)) #depth should be changed as children are produced
+            children.append(Node(temp, self, direction, self.depth + 1, 1, self.goal)) #depth should be changed as children are produced
         return children
-
     
     #gets the given state and returns it's direction + it's parent's direction till there is no parent
-    def solution(self, n):
+    def solution(self, n:int)->dict:
         solution = {}
-        solution[aaa(self.state,n)] = (self.direction)
+        solution[format_current_status_for_printing(self.state,n)] = (self.direction)
         path = self
         while path.parent != None:
             path = path.parent
-            stre = aaa(path.state,n)
+            stre = format_current_status_for_printing(path.state,n)
             solution[stre] = (path.direction)
         res =dict(reversed(list(solution.items())))
         return res
 
-
-def aaa(key,n):
-        stre = "|"
-        for i in range(len(key)):
-            stre += " "
-            stre += (str(key[i]))
-            if((i+1) %n==0):
-                stre += " |\n|"
-        return stre

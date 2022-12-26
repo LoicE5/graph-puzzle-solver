@@ -13,7 +13,7 @@ First n should be entered and then the initial state of puzzle would be a list o
  initial_state = [1, 8, 2, 0, 4, 3, 7, 6, 5]
  ```
  
- Note that if you want to work with n > 3, goal should be changed in State class.
+ Note that if you want to work with n > 3, goal should be changed in Node class.
  
  ## Output
  

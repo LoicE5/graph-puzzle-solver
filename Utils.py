@@ -38,7 +38,30 @@ def get_inv_count(arr:List[list], n:int):
                 inv_count+=1
 
     return inv_count
- 
 
 def clearCLI():
     os.system('cls') if os.environ.get('OS','') == 'Windows_NT' else os.system('clear')
+
+def format_current_status_for_printing(key:str,n:int)->str:
+    stre = "|"
+    for i in range(len(key)):
+        stre += " "
+        stre += (str(key[i]))
+        if((i+1) %n==0):
+            stre += " |\n|"
+    return stre
+
+#this would remove illegal moves for a given state
+def available_moves(x:int,n:int)->list: 
+    moves = ['Left', 'Right', 'Up', 'Down']
+    if x % n == 0:
+        moves.remove('Left')
+    if x % n == n-1:
+        moves.remove('Right')
+    if x - n < 0:
+        moves.remove('Up')
+    if x + n > n*n - 1:
+        moves.remove('Down')
+
+    return moves
+
