@@ -2,18 +2,22 @@ from Utils import check_lines_integrity, start_timeout_check_thread, config, for
 from time import time as now
 from PuzzleSolver import BFS, Astar
 
+"""
+Correct line formatting : dimension x,x,x,x,x,x,...
+Example : 3 1,8,7,3,0,5,4,6,2
+Please do not add any extra space (including trailing space) in the line. There should be only one space between the dimension and the comma-separated values.
+"""
+
 clearCLI()
 filepath = input("Please enter the file path :\n")
 
 file = open(filepath)
-
 lines = file.readlines()
 
 if not check_lines_integrity(lines):
     exit(f"Lines (at least 1) are not in the right format in {filepath}")
 
 start_timeout_check_thread()
-
 counter = 1
 
 for line in lines:
