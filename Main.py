@@ -1,16 +1,23 @@
 from time import time as now
-from Utils import start_timeout_check_thread, force_stop, clearCLI, config
+from Utils import start_timeout_check_thread, force_stop, clearCLI, config, random_puzzle_generation
 from PuzzleSolver import PuzzleSolver, BFS, Astar
 
 n = int(input("Please enter your desired puzzle's dimension :\n"))
 
 base_solver = PuzzleSolver(dimension=n)
 
-p = str(input(f"Please enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
+p = str(input(f"Please enter your {base_solver.dimension}*{base_solver.dimension} puzzle (leave blank for random generation):\n"))
 
-while(not base_solver.is_puzzle_string_right_dimension(p)):
+while((not base_solver.is_puzzle_string_right_dimension(p)) and not (p == "" or p is None)):
     clearCLI()
-    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
+    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle (leave blank for random generation):\n"))
+
+if not p:
+    p = random_puzzle_generation(n)
+    base_solver.build_puzzle(p)
+    while(not base_solver.is_solvable()):
+        p = random_puzzle_generation(n)
+        base_solver.build_puzzle(p)
 
 base_solver.build_puzzle(p)
 

@@ -3,6 +3,7 @@ from time import time as now, sleep as wait
 import os
 import json
 from typing import List
+from random import shuffle
 
 config = json.load(open("./config.json"))
 
@@ -86,3 +87,10 @@ def check_lines_integrity(lines:List[str])->bool:
             return False
         
     return True
+
+def random_puzzle_generation(dimension:int)->str:
+    puzzle_list = [str(i) for i in range(dimension**2)]
+    shuffle(puzzle_list)
+    puzzle_string = ",".join(puzzle_list)
+
+    return puzzle_string
