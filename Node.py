@@ -19,38 +19,42 @@ class Node:
             self.cost:int = cost
 
     
-    def test(self): #check if the given state is goal
+    def check_if_its_goal_state(self): #check if the given state is goal
         if self.state == self.goal:
             return True
         return False
         
     #heuristic function based on Manhattan distance
+    def misplaced_tiles(self,dimension:int): 
+        counter = 0
+        self.heuristic = 0
+        for i in range(dimension**2):
+						#check if the tile at index i is the same as the tile 
+						#at index i of the goal state
+            if (self.state[i] != self.goal[i]):
+                counter += 1
+        self.heuristic = self.heuristic + counter
+				#once the score is generated, 
+				#we return this score + the path cost (path cost is incremented at each node)
+        self.AStar_evaluation = self.heuristic + self.cost
+
+        return self.AStar_evaluation
+
+   #heuristic function based on number of misplaced tiles
     def manhattan_distance(self ,dimension:int): 
         self.heuristic = 0
         for i in range(1 , dimension**2):
             dist = abs(self.state.index(i) - self.goal.index(i))
             
-            #manhattan distance between the current state and goal state
+        #we generate a score as the distance between the current state and goal state
             self.heuristic = self.heuristic + dist/dimension + dist%dimension
-  
+			  #once the score is generated, 
+				#we return this score + the path cost (path cost is incremented at each node)
         self.AStar_evaluation = self.heuristic + self.cost
         
         return self.AStar_evaluation
 
-    #heuristic function based on number of misplaced tiles
-    def misplaced_tiles(self,dimension:int): 
-        counter = 0
-        self.heuristic = 0
-        for i in range(dimension**2):
-            if (self.state[i] != self.goal[i]):
-                counter += 1
-        self.heuristic = self.heuristic + counter
- 
-        self.AStar_evaluation = self.heuristic + self.cost
-
-        return self.AStar_evaluation
-
-    #produces children of a given state
+    #generates the different children of a node
     def expand(self , dimension:int)->list: 
         x = self.state.index(0)
         moves = available_moves(x,dimension)
@@ -67,11 +71,11 @@ class Node:
             elif direction == 'Down':
                 temp[x], temp[x + dimension] = temp[x + dimension], temp[x]
         
-        
-            children.append(Node(temp, self, direction, self.depth + 1, 1, self.goal)) #depth should be changed as children are produced
+            # we need to add new Node to children and increase the depth 
+            children.append(Node(temp, self, direction, self.depth + 1, 1, self.goal)) 
         return children
     
-    #gets the given state and returns it's direction + it's parent's direction till there is no parent
+    #get the full solution of a puzzle, with the puzzle and the direction for each move
     def solution(self, dimension:int)->dict:
         solution = {}
         solution[format_current_status_for_printing(self.state,dimension)] = (self.direction)
