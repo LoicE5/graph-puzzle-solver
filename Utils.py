@@ -60,8 +60,23 @@ def available_moves(x:int,n:int)->list:
         moves.remove('Right')
     if x - n < 0:
         moves.remove('Up')
-    if x + n > n*n - 1:
+    if x + n > n**2 - 1:
         moves.remove('Down')
 
     return moves
 
+def check_lines_integrity(lines:List[str])->bool:
+    for line in lines:
+
+        splitted = line.split(" ")
+
+        if len(splitted) != 2:
+            return False
+        
+        dimension = int(splitted[0])
+        puzzle_string = splitted[1].replace("\n","").split(",")
+
+        if len(puzzle_string) != dimension**2:
+            return False
+        
+    return True

@@ -1,5 +1,5 @@
 from time import time as now
-from Utils import start_timeout_check_thread, force_stop, clearCLI
+from Utils import start_timeout_check_thread, force_stop, clearCLI, config
 from PuzzleSolver import PuzzleSolver, BFS, Astar
 
 n = int(input("Please enter your desired puzzle's dimension :\n"))
@@ -10,7 +10,7 @@ p = str(input(f"Please enter your {base_solver.dimension}*{base_solver.dimension
 
 while(not base_solver.is_puzzle_string_right_dimension(p)):
     clearCLI()
-    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n")) or "manhattan"
+    p = str(input(f"The dimension doesn't match the provided puzzle string.\nPlease enter your {base_solver.dimension}*{base_solver.dimension} puzzle :\n"))
 
 base_solver.build_puzzle(p)
 
@@ -20,7 +20,7 @@ print("The given state is : ", base_solver.state)
 print("The goal state is : ", base_solver.goal)
 print("Puzzle equal : ", base_solver.puzzle)
 
-heuristic = str(input('Please specify wether you want a A* solving using Misplaced tiles heuristic (type "misplaced") or with Manhattan distance heuristic (type "manhattan") :\n'))
+heuristic = str(input('Please specify wether you want a A* solving using Misplaced tiles heuristic (type "misplaced") or with Manhattan distance heuristic (type "manhattan") :\n')) or config["default_heuristic"]
 
 
 if base_solver.is_solvable():
@@ -59,8 +59,6 @@ if base_solver.is_solvable():
     
 else:
     print("Not solvable")
-
-    
 
 
 #1,2,3,4,5,6,7,8,9,14,15,0,13,10,11,12 resolvable par tous les algos 
