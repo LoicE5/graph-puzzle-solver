@@ -78,33 +78,40 @@ class Astar(PuzzleSolver):
         self.heuristic:str = heuristic
 
     def run(self):
-        frontier = PriorityQueue()
-        explored = []
+         #let nodes equal empty list of nodes
+        nodes = PriorityQueue()
+        #let explored_nodes equal empty list of nodes
+        explored_nodes = []
         counter = 0
-        root = Node(self.state, None, None, 0, 0, self.goal)
+        # let initial_node, the initial Start Node
+        initial_node = Node(self.state, None, None, 0, 0, self.goal)
         if self.heuristic == 'manhattan':
-            evaluation = root.manhattan_distance(self.dimension) 
+            score = initial_node.manhattan_distance(self.dimension) 
         else:
-            evaluation = root.misplaced_tiles(self.dimension) 
-        frontier.put((evaluation, counter, root)) #based on A* evaluation
-
-        while not frontier.empty():
-            current_node:tuple = frontier.get()
+            score = initial_node.misplaced_tiles(self.dimension) 
+        # put the start Node into nodes 
+        nodes.put((score, counter, initial_node)) 
+        while not nodes.empty():
+            #Get the current node
+            current_node:tuple = nodes.get()
             current_node:Node = current_node[2]
-            explored.append(current_node.state)
-            
-            if current_node.test():
-                return current_node.solution(self.dimension), len(explored)
-
+            explored_nodes.append(current_node.state)
+            # if current_Node is the goal
+            if current_node.check_if_its_goal_state():
+                #return the solution
+                return current_node.solution(self.dimension), len(explored_nodes)
+            #else generate possible children of the state
             children = current_node.expand(self.dimension)
             for child in children:
-                if child.state not in explored:
+                if child.state not in explored_nodes:
                     counter += 1
+                    #call the heuristic function to generate the score
                     if self.heuristic == 'manhattan':
-                        evaluation = child.manhattan_distance(self.dimension) 
+                        score = child.manhattan_distance(self.dimension) 
                     else:
-                        evaluation = child.misplaced_tiles(self.dimension) 
-                    frontier.put((evaluation, counter, child)) #based on A* evaluation
+                        score = child.misplaced_tiles(self.dimension) 
+                    #put the child into nodes 
+                    nodes.put((score, counter, child)) 
         return
 
 class BFS(PuzzleSolver):
@@ -113,27 +120,31 @@ class BFS(PuzzleSolver):
         super().__init__(dimension, puzzle_string)
 
     def run(self):
-        frontier = Queue()
-        explored = set()
-        
-        initial = Node(self.state, None, None, 0, 0, self.goal)
-        frontier.put(initial)
+       #let nodes equal empty list of nodes
+        nodes = Queue()
+        #let explored_nodes equal empty list of nodes
+        explored_nodes = set()
+        # put the start Node into frontier
+        initial_node = Node(self.state, None, None, 0, 0, self.goal)
+        nodes.put(initial_node)
         counter = 0
 
         # while nodes is not empty
-        while not frontier.empty():
+        while not nodes.empty():
 
-            current_node:Node = frontier.get()
+            current_node:Node = nodes.get()
             current_state:list = current_node.state
 
-            explored.add(str(current_state))
+            explored_nodes.add(str(current_state))
+            # if current_Node is the goal
+            if current_node.check_if_its_goal_state():
+                #return the solution
+                return current_node.solution(self.dimension), len(explored_nodes)
+            #else generate possible children of the state
             children:List[Node] = current_node.expand(self.dimension)
-
-            if current_node.test():
-                return current_node.solution(self.dimension), len(explored)
-
             for child in children:
-                if str(child.state) not in explored:
+                if str(child.state) not in explored_nodes:
                     counter += 1
-                    frontier.put(child)
+                    #put the child into frontier 
+                    nodes.put(child)
         return
