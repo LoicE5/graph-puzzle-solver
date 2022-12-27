@@ -17,6 +17,11 @@ class PuzzleSolver:
             self.build_puzzle(puzzle_string)
 
     def build_puzzle(self, puzzle_string:str):
+        self.puzzle = []
+        self.rows = []
+        self.state = []
+        self.goal = []
+
         j = 1
 
         for i in puzzle_string.split(","):
@@ -39,20 +44,25 @@ class PuzzleSolver:
         # This function returns true if given
         # instance of N*N - 1 puzzle is solvable
 
+        res = 0
+
         # Count inversions in given puzzle
         inv_count = get_inv_count(self.puzzle,self.dimension)
     
         # If grid is odd, return true if inversion
         # count is even.
         if (self.dimension & 1):
-            return ~(inv_count & 1)
+            res = ~(inv_count & 1)
     
         else:    # grid is even
             pos = self.find_x_position()
             if (pos & 1):
-                return ~(inv_count & 1)
+                res = ~(inv_count & 1)
             else:
-                return inv_count & 1
+                res = inv_count & 1
+
+        # -1 if True, -2 if False
+        return res == -1
 
     def find_x_position(self):
         # start from bottom-right corner of matrix
