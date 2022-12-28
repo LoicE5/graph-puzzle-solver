@@ -1,26 +1,35 @@
-# N-Puzzle-solver-with-Search-Algorithms
+# Puzzle Solver
 
-N-puzzle solver with Search Algorithms including: BFS, DFS (with limited depth), Greedy and A*
+> Group : Maxime Bourdon, Loïc Etienne
+
+- Starting a terminal at the root of the project, you can launch the program in two ways:
+    - `python3 Main.py`:
+        
+        this file allows you to launch the program manually,
+        
+        the program will ask the size of the puzzle (matrix of size n)
+        
+        the format of a puzzle is a sequence of numbers separated by commas (if you don't fill this field, a random puzzle will be generated)
+        
+        (example: 1,2,3,4,5,6,7,8,9)
+        
+        Then we can choose the heuristic for the realization of the algorithm of A* (Misplaced Tiles (`misplaced`) or Manhattan(`manhattan`)), the execution starts.
 
 
-There are 2 heuristics for Greedy and A* algorithms. The first one evaluates states with manhattan distance and the second one evaluates states with number of misplaced tiles. 
+        
+        The execution will be done in two steps, first it will solve the puzzle with the BFS and then with the chosen A*
+        
+    - `python3 FromFile.py` :
+        
+        this file allows to launch the program in automatic, the file *puzzles_examples.txt* contains different puzzles which will be solved line by line, each line is composed :
+        
+        n : the size of the matrix
+        
+        string : the puzzle to solve
 
-## Input
+        You can edit this file, or create a new one following the same format. Please avoid adding extra whitespace in the file, as it is used to separate the dimension and the puzzle string already.
 
-First n should be entered and then the initial state of puzzle would be a list of numbers from 0 to (n*n)-1. An example of 8-puzzle with n = 3 is:
+        > Among the default values in the *puzzles_examples.txt* file, one is non-solvable, and serves as an example about how non-solvable puzzles are handled.
+        
 
-```
- initial_state = [1, 8, 2, 0, 4, 3, 7, 6, 5]
- ```
- 
- Note that if you want to work with n > 3, goal should be changed in Node class.
- 
- ## Output
- 
- Output of each search algorithm will be the puzzle solution, number of explored nodes and spent time for search.
- 
- ```
-BFS Solution is  ['Right', 'Up', 'Right', 'Down', 'Down', 'Left', 'Up', 'Right', 'Down']
-Number of explored nodes is  224
-BFS Time: 0.005887031555175781
-```
+You can also change the default time limit and heuristic ("manhattan", "misplaced") in the config.json file.
