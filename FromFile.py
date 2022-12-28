@@ -31,7 +31,9 @@ for line in lines:
         dimension=n,
         puzzle_string=p
     )
-    assert bfs_instance.is_solvable()
+    if not bfs_instance.is_solvable():
+        print("Current puzzle (",p," of ",n,"dimension) is not solvable!")
+        continue
     BFS_solution = bfs_instance.run()
     BFS_time = now() - bfs_start_time
 
@@ -47,7 +49,9 @@ for line in lines:
         heuristic=config["default_heuristic"],
         puzzle_string=p
     )
-    assert AStar_instance.is_solvable()
+    if not AStar_instance.is_solvable():
+        print("Current puzzle (",p," of ",n,"dimension) is not solvable!")
+        continue
     AStar_solution = AStar_instance.run()
     AStar_time = now() - astar_start_time
 
