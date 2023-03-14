@@ -1,6 +1,16 @@
 # Puzzle Solver
 
-> Group : Maxime Bourdon, Loïc Etienne
+> Group : [Maxime Bourdon](https://github.com/Mbourdon95), [Loïc Etienne](https://github.com/LoicE5)
+
+The goal of this project is to solve a 15-puzzle using two graph search algorithms :
+- A* (Astar)
+- BFS (Breadth-First Search)
+
+A* can take both manhattan distance & displaced tiles heuristics
+
+A 15-puzzle looks like the following : 
+
+This project is a school project. The subject is not available on GitHub as it is bound to our teacher's copyright.
 
 - Starting a terminal at the root of the project, you can launch the program in two ways:
     - `python3 Main.py`:
