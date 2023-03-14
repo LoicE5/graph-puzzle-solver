@@ -10,6 +10,8 @@ A* can take both manhattan distance & displaced tiles heuristics
 
 A 15-puzzle looks like the following : 
 
+![15-puzzle image (credit : Michael Kim)](https://user-images.githubusercontent.com/59501884/224975884-ebd60aed-4230-435b-8fa3-7730d7435056.png)
+
 This project is a school project. The subject is not available on GitHub as it is bound to our teacher's copyright.
 
 - Starting a terminal at the root of the project, you can launch the program in two ways:
