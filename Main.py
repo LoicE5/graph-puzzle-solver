@@ -1,5 +1,5 @@
 from time import time as now
-from Utils import start_timeout_check_thread, force_stop, clearCLI, config, random_puzzle_generation
+from utils import start_timeout_check_thread, force_stop, clearCLI, config, random_puzzle_generation
 from PuzzleSolver import PuzzleSolver, BFS, Astar
 
 n = int(input("Please enter your desired puzzle's dimension :\n"))

@@ -1,4 +1,4 @@
-from Utils import available_moves, format_current_status_for_printing
+from utils import available_moves, format_current_status_for_printing
 
 class Node:
 

@@ -1,4 +1,4 @@
-from Utils import check_lines_integrity, start_timeout_check_thread, config, force_stop, clearCLI
+from utils import check_lines_integrity, start_timeout_check_thread, config, force_stop, clearCLI
 from time import time as now
 from PuzzleSolver import BFS, Astar
 
